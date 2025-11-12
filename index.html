@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ai-demo</title>
+  </head>
+  <body>
+    <div class="flex flex-col h-screen" id="app">
+      <header
+        id="header"
+        class="h-24 bg-red-500 flex justify-center content-center"
+      >
+        <select id="drawingMode">
+          <option value="fill" selected>Fill</option>
+          <option value="select">Select</option>
+        </select>
+      </header>
+
+      <canvas id="canvas" class="grow bg-blue-500"></canvas>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

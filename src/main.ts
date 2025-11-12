@@ -9,6 +9,7 @@ if (!app) {
 
 const canvas = document.querySelector("#canvas") as HTMLCanvasElement;
 const header = document.querySelector("#header") as HTMLDivElement;
+const saveGraph = document.querySelector("#save-graph") as HTMLButtonElement;
 const drawingModeSelector = document.querySelector(
   "#drawingMode"
 ) as HTMLSelectElement;
@@ -26,13 +27,13 @@ const edgesForNodes: { [key: number]: Edge[] }[] = [];
 
 const nodeSize = 20;
 const radius = 10;
-type DrawingModeType = "fill" | "select";
+type DrawingModeType = "node" | "edge";
 let drawingMode = drawingModeSelector.value as DrawingModeType;
 
 // ========== Fill Mode ==========
 // Draw nodes
 canvas.addEventListener("click", (e) => {
-  if (drawingMode === "fill") {
+  if (drawingMode === "node") {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -68,7 +69,7 @@ function reDrawGraph() {
 // Undo
 window.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key == "z") {
-    if (drawingMode === "fill") {
+    if (drawingMode === "node") {
       const removedNode = nodes.pop();
       if (removedNode) {
         nodesRedoStack.push(removedNode);
@@ -98,7 +99,7 @@ window.addEventListener("keydown", (e) => {
     }
     reDrawGraph();
   } else if ((e.ctrlKey || e.metaKey) && e.key == "y") {
-    if (drawingMode === "fill") {
+    if (drawingMode === "node") {
       const addBackNode = nodesRedoStack.pop();
       if (addBackNode) {
         nodes.push(addBackNode);
@@ -138,7 +139,7 @@ drawingModeSelector.addEventListener("change", (e) => {
 });
 
 canvas.addEventListener("mousemove", (e) => {
-  if (drawingMode === "select") {
+  if (drawingMode === "edge") {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -156,7 +157,7 @@ canvas.addEventListener("mousemove", (e) => {
 });
 
 canvas.addEventListener("mousedown", (e) => {
-  if (drawingMode === "select") {
+  if (drawingMode === "edge") {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -183,4 +184,23 @@ canvas.addEventListener("mousedown", (e) => {
       }
     }
   }
+});
+
+saveGraph.addEventListener("click", (e) => {
+  const filename = prompt("Enter filename:", "data.json");
+  if (!filename) return;
+
+  const graphData = {
+    nodes: nodes,
+    edges: edges,
+  };
+
+  const json = JSON.stringify(graphData, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
 });

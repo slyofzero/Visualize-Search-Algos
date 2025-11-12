@@ -10,12 +10,17 @@
     <div class="flex flex-col h-screen" id="app">
       <header
         id="header"
-        class="h-24 bg-red-500 flex justify-center content-center"
+        class="h-24 bg-red-500 flex justify-center items-center gap-24"
       >
-        <select id="drawingMode">
-          <option value="fill" selected>Fill</option>
-          <option value="select">Select</option>
-        </select>
+        <div class="flex justify-center items-center gap-12">
+          <p>Drawing Mode:</p>
+          <select id="drawingMode">
+            <option value="node" selected>Node</option>
+            <option value="edge">Edge</option>
+          </select>
+        </div>
+
+        <button id="save-graph">Save Graph</button>
       </header>
 
       <canvas id="canvas" class="grow bg-blue-500"></canvas>
